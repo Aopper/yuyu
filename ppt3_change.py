@@ -66,8 +66,8 @@ def track_fish(detections, tracked_fish, max_y_distance):
             x_distance = detection_center[0] - fish_center[0]
             y_distance = detection_center[1] - fish_center[1]
 
-            if abs(x_distance) < 300 and abs(y_distance - (fish['lost'] + 1) * momentum) < 500:
-                rank_distance =  9 * np.square(x_distance)  + np.square(y_distance - (fish['lost']+1) * momentum) 
+            if abs(x_distance) < 100 and abs(y_distance - (fish['lost'] + 1) * momentum) < 300 and y_distance > 0:
+                rank_distance =  3 * np.square(x_distance)  + np.square(y_distance - (fish['lost']+1) * momentum) 
             else:
                 rank_distance = np.inf
 
