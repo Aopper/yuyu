@@ -6,11 +6,9 @@ import matplotlib.pyplot as plt
 import time
         
 # Load the video file and model
-video_path = '/home/aopp/projects/Q/yuyuyu.mp4'
-output_path = '/home/aopp/projects/Q/yuyuyu_chech.mp4'
-# video_path = '/home/aopp/projects/Q/test.mp4'
-# output_path = '/home/aopp/projects/Q/test_nms.mp4'
-model = YOLO('/home/aopp/Q/yy/runs/detect/train3/weights/best.pt').to('cuda')
+video_path = r'G:\CVBasedFishRecognition\Q\50fish_60fps_Qpc.avi'
+output_path = r'G:\CVBasedFishRecognition\Q\50fish_60fps_Qpc_out.mp4'
+model = YOLO(r'G:\CVBasedFishRecognition\Q\bestfake.pt').to('cuda')  # Use raw string for path
 
 
 
@@ -21,11 +19,11 @@ frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps = cap.get(cv2.CAP_PROP_FPS)
 
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # or 'XVID'
-out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'mp4v'), 15, (frame_width, frame_height))
+out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'mp4v'), 3, (frame_width, frame_height))
 
 # Parameters
-max_y_distance = 120
-momentum = 113
+max_y_distance = 100
+momentum = 85
 
 tracked_fish = []
 fish_id = 0
@@ -113,7 +111,7 @@ def track_fish(detections, tracked_fish, max_y_distance):
             fish['bbox'] = detection
             fish['lost'] = 0
             fish['show_times'] = fish['show_times'] + 1
-            if fish['show_times'] == 5:
+            if fish['show_times'] == 6:
                 counted_fish += 1
                 fish['name'] = counted_id
                 counted_id += 1
@@ -140,7 +138,7 @@ def track_fish(detections, tracked_fish, max_y_distance):
         if j not in matched_fish:
             fish['lost'] += 1
             fish['show_times'] = 0
-            if fish['lost'] < 2:
+            if fish['lost'] < 3:                    # JI Log
                 new_tracked_fish.append(fish)
     
     return new_tracked_fish
@@ -160,10 +158,10 @@ while cap.isOpened():
             x, y, w, h = fish['bbox']
             cv2.rectangle(frame, (x , y ), (x + w, y + h), (255, 0, 0), 2)
             cv2.putText(frame, f'{fish["name"]}', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
-        # else:
-        #     x, y, w, h = fish['bbox']
-        #     cv2.rectangle(frame, (x , y ), (x + w, y + h), (0, 0, 80), 2)
-        #     cv2.putText(frame, f'_{w},{h}', (x, y+5), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+        else:
+            x, y, w, h = fish['bbox']
+            cv2.rectangle(frame, (x , y ), (x + w, y + h), (0, 0, 80), 2)
+            cv2.putText(frame, f'_{w},{h}', (x, y+5), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
     out.write(frame)
 print("TIME: ", time.time() - start_time)
 x_changes.sort()
@@ -179,9 +177,17 @@ plt.title('Average X and Y Changes for Each Fish')
 plt.legend()
 plt.grid(axis='y', linestyle='--', alpha=0.7)
 plt.tight_layout()
+# 设置纵坐标每 10 为一个刻度
+y_min = min(min(x_changes), min(y_changes))
+y_max = max(max(x_changes), max(y_changes))
+plt.yticks(range(int(y_min), int(y_max) + 10, 10))
+
 plt.savefig('./fig.png')
 print("MEAN of X Change: ", np.mean(x_changes))
 print("MEAN of Y Change: ", np.mean(y_changes))
+# 打印 X Y Change 数据的中位数
+print("MEDIAN of x Change: ", np.median(x_changes))
+print("MEDIAN of Y Change: ", np.median(y_changes))
 
 cap.release()
 out.release()
