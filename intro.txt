@@ -1,2 +1,117 @@
 $ git config --global user.name "Your Name"
 $ git config --global user.email "email@example.com"
+
+$ git init
+
+$ git add reademe.txt reademe2.txt
+
+$ git commit -m "Wrote a readme file"
+
+$ git status
+	>>On branch master
+	>>Changes not staged for commit:
+	>>  (use "git add <file>..." to update what will be committed)
+	>>  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	>>	modified:   readme.txt
+
+	>>no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+$ git diff readme.txt
+	>>diff --git a/readme.txt b/readme.txt
+	>>index 46d49bf..9247db6 100644
+	>>--- a/readme.txt
+	>>+++ b/readme.txt
+	>>@@ -1,2 +1,2 @@
+	>>-Git is a version control system.
+	>>+Git is a distributed version control system.
+	>> Git is free software.
+	
+$ git log
+    >>commit 1094adb7b9b3807259d8cb349e7df1d4d6477073 (HEAD -> master)
+    >>Author: Michael Liao <askxuefeng@gmail.com>
+    >>Date:   Fri May 18 21:06:15 2018 +0800
+    >>
+    >>    append GPL
+    >>
+    >>commit e475afc93c209a690c39c13a46716e8fa000c366
+    >>Author: Michael Liao <askxuefeng@gmail.com>
+    >>Date:   Fri May 18 21:03:36 2018 +0800
+    >>
+    >>    add distributed
+    >>
+    >>commit eaadf4e385e865d25c48e7ca9c8395c3f7dfaef0
+    >>Author: Michael Liao <askxuefeng@gmail.com>
+    >>Date:   Fri May 18 20:59:18 2018 +0800
+    >>
+    >>    wrote a readme file
+
+$ git log --pretty=oneline
+    >>1094adb7b9b3807259d8cb349e7df1d4d6477073 (HEAD -> master) append GPL
+    >>e475afc93c209a690c39c13a46716e8fa000c366 add distributed
+    >>eaadf4e385e865d25c48e7ca9c8395c3f7dfaef0 wrote a readme file
+    
+    
+$ git reset --hard HEAD^
+		>>HEAD is now at e475afc add distributed
+
+
+Discard changes before git add
+$ git checkout -- readme.txt
+    (use "git checkout -- <file>..." to discard changes in working directory)
+    
+
+Discard changes before git commit
+$ git reset HEAD readme.txt
+Unstaged changes after reset:
+M	readme.txt
+
+
+After add SSH key to github.
+Following command can link this repo to github repo
+$ git remote add origin git@server-name:path/repo-name.git
+
+# PUSH
+firest time: $ git push -u origin master
+later      : $ git push origin master
+
+
+
+$ git clone git@github.com:michaelliao/repo.git
+
+
+查看分支：git branch
+
+创建分支：git branch <name>
+
+切换分支：git checkout <name>或者git switch <name>
+
+创建+切换分支：git checkout -b <name>或者git switch -c <name>
+
+合并某分支到当前分支：git merge <name>
+
+删除分支：git branch -d <name>
+
+
+
+
+$ git stash
+
+$ git checkout ......
+
+$ git checkout "back"
+
+$ git stash list
+
+stash@{0}: WIP on dev: f52c633 add merge
+
+
+1-> 
+	$ git stash apply stash@{0
+	}
+	$ git stash drop
+2->
+	$ git stash pop
+	
+# same result
