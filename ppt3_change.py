@@ -157,11 +157,11 @@ while cap.isOpened():
         if fish['name'] != '_':
             x, y, w, h = fish['bbox']
             cv2.rectangle(frame, (x , y ), (x + w, y + h), (255, 0, 0), 2)
-            cv2.putText(frame, f'{fish["name"]}', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+            cv2.putText(frame, f'{x},{y},{w},{h}, name:{fish["name"]}', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
         else:
             x, y, w, h = fish['bbox']
             cv2.rectangle(frame, (x , y ), (x + w, y + h), (0, 0, 80), 2)
-            cv2.putText(frame, f'_{w},{h}', (x, y+5), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+            cv2.putText(frame, f'{x},{y},{w},{h}', (x, y+5), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
     out.write(frame)
 print("TIME: ", time.time() - start_time)
 x_changes.sort()
