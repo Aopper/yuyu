@@ -10,7 +10,8 @@ video_path = r'G:\CVBasedFishRecognition\Q\50fish_60fps_Qpc.avi'
 output_path = r'G:\CVBasedFishRecognition\Q\50fish_60fps_Qpc_out.mp4'
 model = YOLO(r'G:\CVBasedFishRecognition\Q\bestfake.pt').to('cuda')  # Use raw string for path
 
-
+model.conf = 0.5
+model.iou = 0.4
 
 # Initialize video writer
 cap = cv2.VideoCapture(video_path)
