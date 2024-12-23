@@ -7,11 +7,11 @@ import time
 import logging
 logging.getLogger().setLevel(logging.WARNING)
 # Load the video file and model
-video_path = '/home/aopp/projects/Q/test.mp4'
-output_path = '/home/aopp/projects/Q/test_nms.mp4'
+video_path = './50fish_60fps_Qpc.avi'
+output_path = './test_nms.mp4'
 # video_path = '/home/aopp/projects/Q/yuyuyu.mp4'
 # output_path = '/home/aopp/projects/Q/yuyuyu_nms.mp4'
-model = YOLO('/home/aopp/Q/yy/runs/detect/train3/weights/best.pt')  # Use raw string for path
+model = YOLO('./best.pt').to('cuda:1')  # Use raw string for path
 
 
 
@@ -43,7 +43,7 @@ def get_center(x, y, w, h):
 
 def detect_fish_in_frame(frame):
     return_list = []
-    results = model(frame)
+    results = model(frame, verbose=False)
     for box in results[0].boxes:
         x1, y1, x2, y2 = map(int, box.xyxy[0])
         return_list.append((x1, y1, x2-x1, y2-y1))
@@ -128,7 +128,7 @@ def track_fish(detections, tracked_fish, max_y_distance):
             matched_fish.add(j)
 
         if len(matched_detections) == len(detections):
-            print(f"JI LOG: Finished at {ji_time} out of {i*j}")
+            # print(f"JI LOG: Finished at {ji_time} out of {i*j}")
             break
 
     # if not matched, creat new Fish
@@ -169,7 +169,7 @@ while cap.isOpened():
             cv2.putText(frame, f'{fish["name"]}', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
     out.write(frame)
 
-print("TIME: ", time.time() - start_time)
+print("TIME: {:.3f} s".format( time.time() - start_time))
 
 cap.release()
 out.release()
