@@ -107,13 +107,12 @@ def track_fish(detections, tracked_fish, max_y_distance):
         if i in matched_detections or j in matched_fish:
             continue
         if x_distance < 100 and np.abs(y_distance)<180:
-
+            fish = tracked_fish[j]
             if fish['lost'] == 0:
                 x_changes.append(x_distance)
                 y_changes.append(y_distance)
 
             detection = detections[i]
-            fish = tracked_fish[j]
 
             fish['center'] = get_center(*detection)
             fish['bbox'] = detection
